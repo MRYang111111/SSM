@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.yxd.mapper.CustomerMapper">
+    <!--
+
+     //根据QuaryVo查询出总数
+    public Integer selectTotalCountByQuaryVo(QuaryVo vo);
+    //根据quaryvo查询list集合
+    public List<Customer> selectListByQuaryVo(QuaryVo vo);
+
+
+ private String customerName;
+    private String custSource;
+    private String custIndustry;
+    private String custLevel;
+
+    -->
+    <select id="selectTotalCountByQueryVo" parameterType="QueryVo" resultType="Integer">
+        SELECT count(*) FROM customer
+        <where>
+            <if test="custName!=null and custName!=''">
+                cust_name like "%"#{custName}"%"
+            </if>
+            <if test="custSource!=null and custSource!=''">
+            and cust_source=#{custSource}
+            </if>
+            <if test="custIndustry!=null and custIndustry!=''">
+                and cust_industry=#{custIndustry}
+            </if>
+            <if test="custLevel!=null and custLevel!=''">
+                and cust_level=#{custLevel}
+            </if>
+        </where>
+    </select>
+    <select id="selectListByQueryVo" parameterType="QueryVo" resultType="Customer">
+        SELECT *
+        FROM customer
+        <where>
+            <if test="custName!=null and custName!=''">
+                cust_name like "%"#{custName}"%"
+            </if>
+            <if test="custSource!=null and custSource!=''">
+                and cust_source=#{custSource}
+            </if>
+            <if test="custIndustry!=null and custIndustry!=''">
+                and cust_industry=#{custIndustry}
+            </if>
+            <if test="custLevel!=null and custLevel!=''">
+                and cust_level=#{custLevel}
+            </if>
+
+        </where>
+        LIMIT #{start},#{row}
+    </select>
+    <!--
+    public  Customer selectCustomerById(Integer id);-->
+    <select id="selectCustomerById" parameterType="Integer" resultType="Customer">
+        SELECT *  FROM customer
+        <where>
+          cust_id=#{id}
+        </where>
+    </select>
+    <!--
+        //根据客户修改信息
+       public  void updateCustomerById(Customer customer);
+    -->
+    <update id="updateCustomerById" parameterType="Customer" >
+/*
+ private Long cust_id;
+    private String cust_name;
+    private Long cust_user_id;
+    private Long cust_create_id;
+    private String cust_source;
+    private String cust_industry;
+    private String cust_level;
+    private String cust_linkman;
+    private String cust_phone;
+    private String cust_mobile;
+    private String cust_zipcode;
+    private String cust_address;
+    private Date cust_createtime;
+*/
+      UPDATE customer
+      <set>
+          <if test="cust_name!=null">
+              cust_name=#{cust_name},
+          </if>
+          <if test="cust_source!=null">
+              cust_source=#{cust_source},
+          </if>
+          <if test="cust_industry!=null">
+              cust_industry=#{cust_industry},
+          </if>
+          <if test="cust_level!=null ">
+              cust_level=#{cust_level},
+          </if>
+          <if test="cust_linkman!=null">
+              cust_linkman=#{cust_linkman}
+          </if>
+      </set>
+        <where>
+            cust_id=#{cust_id}
+        </where>
+    </update>
+    <!--
+    public  void  deleteCustomerById(Integer id);
+    -->
+    <delete id="deleteCustomerById" parameterType="Integer">
+        DELETE  FROM  customer WHERE  cust_id=#{cust_id};
+    </delete>
+
+</mapper>
